@@ -1,5 +1,4 @@
 import {
-  Package2,
   Home,
   ShoppingCart,
   Package,
@@ -7,22 +6,8 @@ import {
   LineChart,
   Settings,
 } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import Link from "next/link";
 import SidebarMenuItem from "./menuItem";
-
-const menuList = [
-  { link: "/", name: "Painel", icon: <Home /> },
-  { link: "/estoque", name: "Estoque", icon: <ShoppingCart /> },
-  { link: "/produtos", name: "Produtos", icon: <Package /> },
-  { link: "/fornecedores", name: "Fornecedores", icon: <Users2 /> },
-  { link: "/relatorios", name: "Relatórios", icon: <LineChart /> },
-];
+import { menuList } from "@/constants/menuItem";
 
 export default function Sidebar() {
   return (

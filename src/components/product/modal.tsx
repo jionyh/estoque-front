@@ -20,10 +20,13 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import InventoryEntryForm from "@/components/forms/inventoryEntry";
 import { PlusCircle } from "lucide-react";
 
-export default function AddInventoryModal() {
+type Props = {
+  children: React.ReactNode;
+};
+
+export default function ProductModal({ children }: Props) {
   const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
@@ -34,18 +37,18 @@ export default function AddInventoryModal() {
           <Button size="sm" className="h-8 gap-1">
             <PlusCircle className="h-3.5 w-3.5" />
             <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-              Adicionar Estoque
+              Adicionar Produto
             </span>
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Adicionar ao estoque</DialogTitle>
+            <DialogTitle>Adicionar Produto</DialogTitle>
             <DialogDescription>
               Adicione produtos ao estoque e para finalizar clique em salvar
             </DialogDescription>
           </DialogHeader>
-          <InventoryEntryForm />
+          {children}
         </DialogContent>
       </Dialog>
     );
@@ -68,7 +71,7 @@ export default function AddInventoryModal() {
             Adicione produtos ao estoque e para finalizar clique em salvar
           </DrawerDescription>
         </DrawerHeader>
-        <InventoryEntryForm className="px-4" />
+        {children}
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancelar</Button>

@@ -15,14 +15,35 @@ import { Switch } from "@/components/ui/switch";
 
 import { cn } from "@/lib/utils";
 import DatePicker from "../datePicker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { Product } from "@/types/product";
+import { Supplier } from "@/types/supplier";
+import { Separator } from "../ui/separator";
+import { ApiFunctions } from "@/types/apiFunctions";
 
-export default function InventoryEntryForm({
-  className,
-}: React.ComponentProps<"form">) {
+type Props = {
+  apiFn: ApiFunctions;
+};
+
+export default function InventoryForm({ apiFn }: Props) {
   const [haveValidity, setHaveValidity] = useState(false);
+  const [productList, setProductList] = useState<Product[]>([]);
+  const [supplierList, setSupplierList] = useState<Supplier[]>([]);
+
+  async function getLists() {
+    const prodList = await apiFn.product.getAll();
+    const supList = await apiFn.supplier.getAll();
+    if (prodList.success && supList.success) {
+      setProductList(prodList.data);
+      setSupplierList(supList.data);
+    }
+  }
+  useEffect(() => {
+    getLists();
+  }, []);
+
   return (
-    <form className={cn("grid items-start gap-4", className)}>
+    <form className={cn("grid items-start gap-4")}>
       <div className="grid gap-2">
         <Select>
           <SelectTrigger className="">
@@ -30,11 +51,24 @@ export default function InventoryEntryForm({
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectItem value="01">Papel A4</SelectItem>
-              <SelectItem value="02">Rivotril</SelectItem>
-              <SelectItem value="03">Remédio</SelectItem>
-              <SelectItem value="04">Toalha Papel</SelectItem>
-              <SelectItem value="05">Caneta</SelectItem>
+              {productList.length === 0 && (
+                <SelectItem value="0" disabled>
+                  Carregando Lista....
+                </SelectItem>
+              )}
+              {productList.length > 0 &&
+                productList.map((list) => (
+                  <SelectItem
+                    className="cursor-pointer"
+                    value={list.productId.toString()}
+                  >
+                    {list.name}
+                  </SelectItem>
+                ))}
+              <Separator />
+              <SelectItem className="cursor-pointer" value="criar">
+                Adicionar Produto
+              </SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
@@ -71,10 +105,19 @@ export default function InventoryEntryForm({
           </SelectTrigger>
           <SelectContent>
             <SelectGroup>
-              <SelectItem value="01">Fulano</SelectItem>
-              <SelectItem value="02">Ciclano</SelectItem>
-              <SelectItem value="03">Jiony</SelectItem>
-              <SelectItem value="04">Meguinha</SelectItem>
+              {supplierList.length === 0 && (
+                <SelectItem value="0" disabled>
+                  Carregando Lista....
+                </SelectItem>
+              )}
+              {supplierList.length > 0 &&
+                supplierList.map((list) => (
+                  <SelectItem value={list.supplierId.toString()}>
+                    {list.name}
+                  </SelectItem>
+                ))}
+              <Separator />
+              <SelectItem value="criar">Adicionar Fornecedor</SelectItem>
             </SelectGroup>
           </SelectContent>
         </Select>
