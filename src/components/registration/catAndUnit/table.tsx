@@ -1,27 +1,5 @@
-import {
-  Delete,
-  FilePenIcon,
-  FileX2,
-  FileX2Icon,
-  MoreHorizontal,
-  Pencil,
-  Trash2,
-} from "lucide-react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Trash2 } from "lucide-react";
+import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import {
   TableHeader,
   TableRow,
@@ -38,20 +16,19 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import CatAndUnitModal from "./modal";
-import CatAndUnitForm from "./form";
+import DeleteButton from "@/components/deleteButton";
 
 export default async function CatAndUnitTable() {
   const categoryList = await api.category.getAll();
   const unitList = await api.unit.getAll();
+
   return (
     <div className="grid gap-1 sm:grid-cols-1 sm:gap-8 md:grid-cols-2">
       <Card className="flex-1">
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>Categorias</CardTitle>
-            <CatAndUnitModal>
-              <CatAndUnitForm />
-            </CatAndUnitModal>
+            <CatAndUnitModal apiFn={api} />
           </div>
         </CardHeader>
         <CardContent>
@@ -78,9 +55,11 @@ export default async function CatAndUnitTable() {
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger>
-                            <CatAndUnitModal edit>
-                              <CatAndUnitForm edit data={cat.name} />
-                            </CatAndUnitModal>
+                            <CatAndUnitModal
+                              edit
+                              data={{ id: cat.categoryId, name: cat.name }}
+                              apiFn={api}
+                            />
                           </TooltipTrigger>
                           <TooltipContent>Editar</TooltipContent>
                         </Tooltip>
@@ -88,9 +67,10 @@ export default async function CatAndUnitTable() {
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger>
-                            <div className="cursor-pointer rounded border p-1 text-red-600">
-                              <Trash2 size={20} />
-                            </div>
+                            <DeleteButton
+                              data={{ id: cat.categoryId, name: cat.name }}
+                              apiFn={api}
+                            />
                           </TooltipTrigger>
                           <TooltipContent>Deletar</TooltipContent>
                         </Tooltip>
@@ -107,9 +87,7 @@ export default async function CatAndUnitTable() {
         <CardHeader>
           <div className="flex items-center justify-between">
             <CardTitle>Unidades</CardTitle>
-            <CatAndUnitModal type="Unidade">
-              <CatAndUnitForm type="Unidade" />
-            </CatAndUnitModal>
+            <CatAndUnitModal type="Unidade" apiFn={api} />
           </div>
         </CardHeader>
         <CardContent>
@@ -136,9 +114,12 @@ export default async function CatAndUnitTable() {
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger>
-                            <CatAndUnitModal edit>
-                              <CatAndUnitForm edit data={unit.name} />
-                            </CatAndUnitModal>
+                            <CatAndUnitModal
+                              edit
+                              type="Unidade"
+                              data={{ id: unit.unitId, name: unit.name }}
+                              apiFn={api}
+                            />
                           </TooltipTrigger>
                           <TooltipContent>Editar</TooltipContent>
                         </Tooltip>
@@ -146,9 +127,11 @@ export default async function CatAndUnitTable() {
                       <TooltipProvider>
                         <Tooltip>
                           <TooltipTrigger>
-                            <div className="cursor-pointer rounded border p-1 text-red-600">
-                              <Trash2 size={20} />
-                            </div>
+                            <DeleteButton
+                              type="Unidade"
+                              data={{ id: unit.unitId, name: unit.name }}
+                              apiFn={api}
+                            />
                           </TooltipTrigger>
                           <TooltipContent>Deletar</TooltipContent>
                         </Tooltip>

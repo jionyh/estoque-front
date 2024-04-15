@@ -1,5 +1,5 @@
 "use client";
-import * as React from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { useMediaQuery } from "@/hooks/use-media-query";
 import { Button } from "@/components/ui/button";
 import {
@@ -21,23 +21,132 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { Pencil, PlusCircle } from "lucide-react";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { cn } from "@/lib/utils";
+import { toast } from "react-toastify";
+import { ApiFunctions } from "@/types/apiFunctions";
 
 type Props = {
   type?: "Categoria" | "Unidade";
   edit?: boolean;
-  children: React.ReactNode;
+  data?: { id: number; name: string };
+  apiFn: ApiFunctions;
 };
 
 export default function CatAndUnitModal({
-  children,
   type = "Categoria",
   edit = false,
+  data,
+  apiFn,
 }: Props) {
-  const [open, setOpen] = React.useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
-
+  const [name, setName] = useState("");
+  const [open, setOpen] = useState(false);
   const dialogTitle =
     type === "Categoria" ? "Adicionar Categoria" : "Adicionar Unidade";
+
+  const handleFormSubmit = (e: FormEvent<HTMLFormElement>) =>
+    edit ? editFormSubmit(e) : createFormSubmit(e);
+
+  const editFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    if (!data) return;
+    e.preventDefault();
+    let res;
+    const loadingToast = toast.loading(`Editando ${type}...`);
+    switch (type) {
+      case "Categoria":
+        res = await apiFn.category.edit(data.id, name);
+        break;
+
+      case "Unidade":
+        res = await apiFn.unit.edit(data.id, name);
+        break;
+    }
+
+    if (res.success) {
+      toast.update(loadingToast, {
+        render: `${type} editada com sucesso!`,
+        type: "success",
+        isLoading: false,
+        autoClose: 2000,
+      });
+    } else {
+      if (Array.isArray(res.data)) {
+        res.data.forEach((item) =>
+          toast.update(loadingToast, {
+            render: `${item.message}`,
+            type: "error",
+            isLoading: false,
+            autoClose: 2000,
+          }),
+        );
+      } else {
+        toast.update(loadingToast, {
+          render: `${res.data}`,
+          type: "error",
+          isLoading: false,
+          autoClose: 2000,
+        });
+      }
+    }
+
+    if (res.success && setOpen) {
+      setOpen(false);
+    }
+  };
+
+  const createFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    let res;
+    const loadingToast = toast.loading(`Criando ${type}...`);
+    switch (type) {
+      case "Categoria":
+        res = await apiFn.category.create(name);
+        break;
+
+      case "Unidade":
+        res = await apiFn.unit.create(name);
+        break;
+    }
+
+    if (res.success) {
+      toast.update(loadingToast, {
+        render: `${type} criada com sucesso!`,
+        type: "success",
+        isLoading: false,
+        autoClose: 2000,
+      });
+    } else {
+      if (Array.isArray(res.data)) {
+        res.data.forEach((item) =>
+          toast.update(loadingToast, {
+            render: `${item.message}`,
+            type: "error",
+            isLoading: false,
+            autoClose: 2000,
+          }),
+        );
+      } else {
+        toast.update(loadingToast, {
+          render: `${res.data}`,
+          type: "error",
+          isLoading: false,
+          autoClose: 2000,
+        });
+      }
+    }
+
+    if (res.success && setOpen) {
+      setOpen(false);
+    }
+  };
+
+  useEffect(() => {
+    if (edit && data) {
+      setName(data.name);
+    }
+  }, [data, edit]);
 
   if (isDesktop) {
     return (
@@ -63,7 +172,21 @@ export default function CatAndUnitModal({
               {`Adicione nova ${type} e para finalizar clique em salvar`}
             </DialogDescription>
           </DialogHeader>
-          {children}
+          <form
+            onSubmit={(e) => handleFormSubmit(e)}
+            className={cn("grid items-start gap-3")}
+          >
+            <div className="grid gap-2">
+              <Label htmlFor="name">{type}</Label>
+              <Input
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder={`Adicione o nome da ${type}`}
+              />
+            </div>
+            <Button type="submit">{edit ? "Editar" : "Salvar"}</Button>
+          </form>
         </DialogContent>
       </Dialog>
     );
@@ -92,7 +215,23 @@ export default function CatAndUnitModal({
             {`Adicione nova ${type} e para finalizar clique em salvar`}
           </DrawerDescription>
         </DrawerHeader>
-        <div className="px-4">{children}</div>
+        <div className="px-4">
+          <form
+            onSubmit={(e) => handleFormSubmit(e)}
+            className={cn("grid items-start gap-3")}
+          >
+            <div className="grid gap-2">
+              <Label htmlFor="name">{type}</Label>
+              <Input
+                id="name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder={`Adicione o nome da ${type}`}
+              />
+            </div>
+            <Button type="submit">{edit ? "Editar" : "Salvar"}</Button>
+          </form>
+        </div>
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button className="w-full" variant="outline">
