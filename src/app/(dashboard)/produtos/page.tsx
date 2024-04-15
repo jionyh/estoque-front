@@ -1,8 +1,7 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProductModal from "@/components/product/modal";
-import ProductForm from "@/components/product/productForm";
 import api from "@/api";
-import ProductTable from "@/components/product/productTable";
+import ProductTable from "@/components/product/table";
 
 export default function Products() {
   return (
@@ -14,9 +13,7 @@ export default function Products() {
           <TabsTrigger value="draft">Sem Estoque</TabsTrigger>
         </TabsList>
         <div className="ml-auto flex items-center gap-2">
-          <ProductModal>
-            <ProductForm apiFn={api} />
-          </ProductModal>
+          <ProductModal apiFn={api} />
         </div>
       </div>
       <TabsContent value="all">

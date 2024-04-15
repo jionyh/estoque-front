@@ -1,7 +1,14 @@
-import { create as createProduct, getAll as getAllProducts } from "./product";
+import {
+  create as createProduct,
+  getAll as getAllProducts,
+  deleteProduct,
+  edit as editProduct,
+} from "./product";
 import {
   create as createSupplier,
   getAll as getAllSuppliers,
+  deleteSupplier,
+  edit as editSupplier,
 } from "./supplier";
 import {
   create as createInventoryEntry,
@@ -22,8 +29,18 @@ import {
 import { ApiFunctions } from "@/types/apiFunctions";
 
 const api: ApiFunctions = {
-  product: { getAll: getAllProducts },
-  supplier: { getAll: getAllSuppliers },
+  product: {
+    getAll: getAllProducts,
+    create: createProduct,
+    delete: deleteProduct,
+    edit: editProduct,
+  },
+  supplier: {
+    getAll: getAllSuppliers,
+    create: createSupplier,
+    delete: deleteSupplier,
+    edit: editSupplier,
+  },
   inventoryEntry: { getAll: getAllInventoryEntries },
   category: {
     create: createCategory,

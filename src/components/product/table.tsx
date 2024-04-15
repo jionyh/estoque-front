@@ -22,6 +22,8 @@ import {
   Table,
 } from "../ui/table";
 import api from "@/api";
+import ProductModal from "./modal";
+import DeleteProductButton from "./deleteButton";
 
 export default async function ProductTable() {
   const productsList = await api.product.getAll();
@@ -63,20 +65,8 @@ export default async function ProductTable() {
                   <div className="flex justify-center gap-1 md:gap-4">
                     <TooltipProvider>
                       <Tooltip>
-                        <TooltipTrigger className="hover:scale-95">
-                          <div className="cursor-pointer rounded border p-1 text-green-600">
-                            <Search size={20} />
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent>Visualizar Produto</TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                    <TooltipProvider>
-                      <Tooltip>
                         <TooltipTrigger className=" hover:scale-95">
-                          <div className="cursor-pointer rounded border p-1 text-blue-600">
-                            <Pencil size={20} />
-                          </div>
+                          <ProductModal edit apiFn={api} data={product} />
                         </TooltipTrigger>
                         <TooltipContent>Editar Produto</TooltipContent>
                       </Tooltip>
@@ -84,9 +74,7 @@ export default async function ProductTable() {
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger className=" hover:scale-95">
-                          <div className="cursor-pointer rounded border p-1 text-red-600">
-                            <Trash2 size={20} />
-                          </div>
+                          <DeleteProductButton data={product} apiFn={api} />
                         </TooltipTrigger>
                         <TooltipContent>Deletar Produto</TooltipContent>
                       </Tooltip>

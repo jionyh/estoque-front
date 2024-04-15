@@ -19,8 +19,9 @@ import {
   TableCell,
   Table,
 } from "@/components/ui/table";
-import { Pencil, Trash2 } from "lucide-react";
 import api from "@/api";
+import SupplierModal from "./modal";
+import DeleteSupplierButton from "./deleteButton";
 
 export default async function SupplierTable() {
   const supplierList = await api.supplier.getAll();
@@ -28,7 +29,10 @@ export default async function SupplierTable() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Fornecedores</CardTitle>
+        <div className="flex items-center justify-between">
+          <CardTitle>Fornecedores</CardTitle>
+          <SupplierModal apiFn={api} />
+        </div>
       </CardHeader>
       <CardContent>
         <Table>
@@ -55,9 +59,7 @@ export default async function SupplierTable() {
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger>
-                          <div className="cursor-pointer rounded border p-1 text-blue-600">
-                            <Pencil size={20} />
-                          </div>
+                          <SupplierModal edit apiFn={api} data={supplier} />
                         </TooltipTrigger>
                         <TooltipContent>Editar</TooltipContent>
                       </Tooltip>
@@ -65,9 +67,7 @@ export default async function SupplierTable() {
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger>
-                          <div className="cursor-pointer rounded border p-1 text-red-600">
-                            <Trash2 size={20} />
-                          </div>
+                          <DeleteSupplierButton data={supplier} apiFn={api} />
                         </TooltipTrigger>
                         <TooltipContent>Deletar</TooltipContent>
                       </Tooltip>

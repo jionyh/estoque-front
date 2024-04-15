@@ -13,3 +13,16 @@ export interface ProductResponse {
   success: boolean;
   data: Product[];
 }
+
+export interface ProductCreateResponse {
+  success: true;
+  data: Product;
+}
+
+export interface ProductCreate {
+  productId: number;
+  name: string;
+  unitId: number;
+  categoryId: number;
+  minStock: number;
+}

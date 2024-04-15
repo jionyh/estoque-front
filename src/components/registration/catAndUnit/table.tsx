@@ -16,7 +16,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import CatAndUnitModal from "./modal";
-import DeleteButton from "@/components/deleteButton";
+import DeleteButton from "@/components/registration/catAndUnit/deleteButton";
 
 export default async function CatAndUnitTable() {
   const categoryList = await api.category.getAll();

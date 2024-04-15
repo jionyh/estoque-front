@@ -9,3 +9,7 @@ export interface SupplierResponse {
   success: boolean;
   data: Supplier[];
 }
+export interface SupplierCreateResponse {
+  success: boolean;
+  data: Supplier;
+}
