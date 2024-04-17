@@ -12,6 +12,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 import { cn } from "@/lib/utils";
 import DatePicker from "../datePicker";
@@ -20,6 +32,7 @@ import { Product } from "@/types/product";
 import { Supplier } from "@/types/supplier";
 import { Separator } from "../ui/separator";
 import { ApiFunctions } from "@/types/apiFunctions";
+import ComboSelect from "@/components/comboSelect";
 
 type Props = {
   apiFn: ApiFunctions;
@@ -29,6 +42,10 @@ export default function InventoryForm({ apiFn }: Props) {
   const [haveValidity, setHaveValidity] = useState(false);
   const [productList, setProductList] = useState<Product[]>([]);
   const [supplierList, setSupplierList] = useState<Supplier[]>([]);
+  const [selected, setSelected] = useState({
+    id: "",
+    name: "",
+  });
 
   async function getLists() {
     const prodList = await apiFn.product.getAll();
@@ -38,6 +55,7 @@ export default function InventoryForm({ apiFn }: Props) {
       setSupplierList(supList.data);
     }
   }
+
   useEffect(() => {
     getLists();
   }, []);
@@ -45,33 +63,14 @@ export default function InventoryForm({ apiFn }: Props) {
   return (
     <form className={cn("grid items-start gap-4")}>
       <div className="grid gap-2">
-        <Select>
-          <SelectTrigger className="">
-            <SelectValue placeholder="Selecione o produto" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectGroup>
-              {productList.length === 0 && (
-                <SelectItem value="0" disabled>
-                  Carregando Lista....
-                </SelectItem>
-              )}
-              {productList.length > 0 &&
-                productList.map((list) => (
-                  <SelectItem
-                    className="cursor-pointer"
-                    value={list.productId.toString()}
-                  >
-                    {list.name}
-                  </SelectItem>
-                ))}
-              <Separator />
-              <SelectItem className="cursor-pointer" value="criar">
-                Adicionar Produto
-              </SelectItem>
-            </SelectGroup>
-          </SelectContent>
-        </Select>
+        <ComboSelect
+          type="product"
+          selected={selected}
+          setSelected={setSelected}
+          data={productList.map((prod) => {
+            return { id: prod.productId.toString(), name: prod.name };
+          })}
+        />
       </div>
       <div className="flex h-full items-end justify-between gap-2">
         <div className="grid flex-1 gap-2">
@@ -112,7 +111,10 @@ export default function InventoryForm({ apiFn }: Props) {
               )}
               {supplierList.length > 0 &&
                 supplierList.map((list) => (
-                  <SelectItem value={list.supplierId.toString()}>
+                  <SelectItem
+                    key={list.supplierId}
+                    value={list.supplierId.toString()}
+                  >
                     {list.name}
                   </SelectItem>
                 ))}
