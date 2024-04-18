@@ -1,10 +1,12 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import InventoryTable from "@/components/inventory/inventoryTable";
+import InventoryTable from "@/components/inventory/table";
 import InventoryModal from "@/components/inventory/modal";
-import InventoryForm from "@/components/inventory/inventoryForm";
 import api from "@/api";
 
 export default async function Inventory() {
+  const supplierList = await api.supplier.getAll();
+  const productList = await api.product.getAll();
+
   return (
     <Tabs defaultValue="all">
       <div className="flex items-center">
@@ -13,10 +15,12 @@ export default async function Inventory() {
           <TabsTrigger value="active">Recente</TabsTrigger>
           <TabsTrigger value="draft">Em baixa</TabsTrigger>
         </TabsList>
-        <div className="ml-auto flex items-center gap-2">
-          <InventoryModal>
-            <InventoryForm apiFn={api} />
-          </InventoryModal>
+        <div className="ml-auto flex items-center gap-2 p-2">
+          <InventoryModal
+            productList={productList.data}
+            supplierList={supplierList.data}
+            apiFn={api}
+          />
         </div>
       </div>
       <TabsContent value="all">

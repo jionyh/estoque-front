@@ -22,7 +22,7 @@ import {
 } from "../ui/table";
 import api from "@/api";
 import { formatDate } from "@/utils/formatDate";
-import Link from "next/link";
+import DetailsButton from "./detailsButton";
 
 export default async function InventoryTable() {
   const inventoryList = await api.inventoryEntry.getAll();
@@ -66,9 +66,7 @@ export default async function InventoryTable() {
                     <TooltipProvider>
                       <Tooltip>
                         <TooltipTrigger className="hover:scale-95">
-                          <div className="cursor-pointer rounded border p-1 text-green-600">
-                            <Search size={20} />
-                          </div>
+                          <DetailsButton entryId={item.entryId} />
                         </TooltipTrigger>
                         <TooltipContent>Visualizar</TooltipContent>
                       </Tooltip>

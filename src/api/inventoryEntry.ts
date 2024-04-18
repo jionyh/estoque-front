@@ -1,21 +1,18 @@
 import { baseURL } from "@/config/api";
-import { InventoryResponse } from "@/types/inventory";
-import { ProductResponse } from "@/types/product";
+import { ErrorResponse } from "@/types/error";
+import { InventoryCreate, InventoryCreateResponse, InventoryResponse } from "@/types/inventory";
 import { revalidateTag } from "next/cache";
 
 export const create = async (
-  searchTerm: string,
-  priceMin: string,
-  priceMax: string,
-  website: string,
-) => {
+data:Omit<InventoryCreate,'entryId'>
+):Promise<InventoryCreateResponse | ErrorResponse> => {
   "use server";
-  const res = await fetch(`${baseURL}/product/create`, {
+  const res = await fetch(`${baseURL}/inventory/create`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ searchTerm, priceMax, priceMin, website }),
+    body: JSON.stringify(data),
   });
   revalidateTag("allInventory");
   return await res.json();

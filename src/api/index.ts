@@ -41,7 +41,7 @@ const api: ApiFunctions = {
     delete: deleteSupplier,
     edit: editSupplier,
   },
-  inventoryEntry: { getAll: getAllInventoryEntries },
+  inventoryEntry: { getAll: getAllInventoryEntries, create: createInventoryEntry },
   category: {
     create: createCategory,
     getAll: getAllCategories,

@@ -4,7 +4,7 @@ import {
   ProductResponse,
 } from "./product";
 import { Supplier, SupplierCreateResponse, SupplierResponse } from "./supplier";
-import { InventoryResponse } from "./inventory";
+import { InventoryCreate, InventoryCreateResponse, InventoryResponse } from "./inventory";
 import { CategoryCreateResponse, CategoryResponse } from "./category";
 import { ErrorResponse } from "./error";
 import { UnitCreateResponse, UnitResponse } from "./unit";
@@ -32,6 +32,7 @@ export interface ApiFunctions {
   };
   inventoryEntry: {
     getAll: () => Promise<InventoryResponse>;
+    create: (data:Omit<InventoryCreate,'entryId'>)=>Promise<InventoryCreateResponse | ErrorResponse>;
   };
   category: {
     getAll: () => Promise<CategoryResponse>;

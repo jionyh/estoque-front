@@ -2,24 +2,24 @@
 import React, { createContext, useContext, useState } from "react";
 
 interface ContextProps {
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  entryId: number | undefined;
+  setEntryId: React.Dispatch<React.SetStateAction<number | undefined>>;
 }
-const AppContext = createContext<ContextProps>({
-  isOpen: false,
-  setIsOpen: () => {},
+const InventoryEntryDetails = createContext<ContextProps>({
+  entryId: undefined,
+  setEntryId: () => {},
 });
 export function AppWrapper({ children }: { children: React.ReactNode }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [entryId, setEntryId] = useState<number | undefined>();
   return (
-    <AppContext.Provider value={{ isOpen, setIsOpen }}>
+    <InventoryEntryDetails.Provider value={{ entryId, setEntryId }}>
       {children}
-    </AppContext.Provider>
+    </InventoryEntryDetails.Provider>
   );
 }
 
-export function useModalContext() {
-  const context = useContext(AppContext);
+export function useEntryContext() {
+  const context = useContext(InventoryEntryDetails);
   if (!context) {
     throw new Error("useAppContext must be used within an AppWrapper");
   }

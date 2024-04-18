@@ -14,13 +14,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 
-export default function DatePicker() {
-  const [date, setDate] = React.useState<Date>();
+type Props = {
+  date: Date | undefined;
+  setDate: React.Dispatch<Date | undefined>;
+};
 
-  React.useEffect(() => {
-    console.log(date?.toISOString());
-  }, [date]);
-
+export default function DatePicker({ date, setDate }: Props) {
   return (
     <Popover>
       <PopoverTrigger asChild>
