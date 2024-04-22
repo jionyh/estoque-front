@@ -40,8 +40,8 @@ const initialSelected = { id: "", name: "" };
 const placeholderText = {
   product: "Selecione o Produto...",
   category: "Selecione a Categoria...",
-  supplier: "Selecione o Fornecedor",
-  unit: "Selecione a Unidade",
+  supplier: "Selecione o Fornecedor ...",
+  unit: "Selecione a Unidade ...",
 };
 const notFoundText = {
   product: "Produto não encontrado",
@@ -75,10 +75,14 @@ export default function ComboSelect({
             aria-expanded={open}
             className="justify-between"
           >
-            {selected.id
-              ? data.find((data) => data.name === selected.name)?.name
-              : placeholderText[type]}
-            <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+            {selected.id ? (
+              data.find((data) => data.name === selected.name)?.name
+            ) : (
+              <span className="text-xs  text-muted-foreground">
+                {placeholderText[type]}
+              </span>
+            )}
+            <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
         <PopoverContent className="p-0">

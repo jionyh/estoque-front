@@ -20,15 +20,6 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectLabel,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Pencil, PlusCircle } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -38,6 +29,7 @@ import { ApiFunctions } from "@/types/apiFunctions";
 import { Product, ProductCreate } from "@/types/product";
 import { Unit } from "@/types/unit";
 import { Category } from "@/types/category";
+import ComboSelect from "../comboSelect";
 
 type Props = {
   edit?: boolean;
@@ -46,17 +38,18 @@ type Props = {
 };
 const initialFormData = {
   name: "",
-  categoryId: 0,
-  minStock: 0,
-  unitId: 0,
+  category: { id: "", name: "" },
+  unit: { id: "", name: "" },
 };
 
 export default function ProductModal({ edit = false, data, apiFn }: Props) {
   const isDesktop = useMediaQuery("(min-width: 768px)");
   const [open, setOpen] = useState(false);
-
-  const [formData, setFormData] =
-    useState<Omit<ProductCreate, "productId">>(initialFormData);
+  const [selectedCategory, setSelectedCategory] = useState(
+    initialFormData.category,
+  );
+  const [selectedUnit, setSelectedUnit] = useState(initialFormData.unit);
+  const [productName, setProductName] = useState(initialFormData.name);
   const [categoryList, setCategoryList] = useState<Category[]>([]);
   const [unitList, setUnitList] = useState<Unit[]>([]);
 
@@ -80,7 +73,9 @@ export default function ProductModal({ edit = false, data, apiFn }: Props) {
     const loadingToast = toast.loading(`Editando Produto...`);
 
     const res = await apiFn.product.edit({
-      ...formData,
+      name: productName,
+      categoryId: parseInt(selectedCategory.id),
+      unitId: parseInt(selectedUnit.id),
       productId: data.productId,
     });
 
@@ -112,7 +107,9 @@ export default function ProductModal({ edit = false, data, apiFn }: Props) {
     }
 
     if (res.success && setOpen) {
-      setFormData(initialFormData);
+      setProductName(initialFormData.name);
+      setSelectedCategory(initialFormData.category);
+      setSelectedUnit(initialFormData.unit);
       setOpen(false);
     }
   };
@@ -121,7 +118,11 @@ export default function ProductModal({ edit = false, data, apiFn }: Props) {
     e.preventDefault();
 
     const loadingToast = toast.loading(`Criando Produto...`);
-    const res = await apiFn.product.create(formData);
+    const res = await apiFn.product.create({
+      name: productName,
+      categoryId: parseInt(selectedCategory.id),
+      unitId: parseInt(selectedUnit.id),
+    });
 
     if (res.success) {
       toast.update(loadingToast, {
@@ -151,7 +152,9 @@ export default function ProductModal({ edit = false, data, apiFn }: Props) {
     }
 
     if (res.success && setOpen) {
-      setFormData(initialFormData);
+      setProductName(initialFormData.name);
+      setSelectedCategory(initialFormData.category);
+      setSelectedUnit(initialFormData.unit);
       setOpen(false);
     }
   };
@@ -159,13 +162,17 @@ export default function ProductModal({ edit = false, data, apiFn }: Props) {
   useEffect(() => {
     getLists();
   }, []);
+
   useEffect(() => {
     if (edit && data) {
-      setFormData({
-        name: data.name,
-        categoryId: data.category.categoryId,
-        unitId: data.unit.unitId,
-        minStock: data.minStock,
+      setProductName(data.name);
+      setSelectedCategory({
+        id: data.category.categoryId.toString(),
+        name: data.category.name,
+      });
+      setSelectedUnit({
+        id: data.unit.unitId.toString(),
+        name: data.unit.name,
       });
     }
   }, [data, edit]);
@@ -203,95 +210,28 @@ export default function ProductModal({ edit = false, data, apiFn }: Props) {
               <Input
                 id="productName"
                 placeholder="Nome do produto"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
+                value={productName}
+                onChange={(e) => setProductName(e.target.value)}
               />
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <Select
-                value={formData.categoryId.toString()}
-                onValueChange={(prev) =>
-                  setFormData({ ...formData, categoryId: parseInt(prev) })
-                }
-              >
-                <SelectTrigger className="">
-                  <SelectValue placeholder="Categoria" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {categoryList.length === 0 ? (
-                      <SelectItem value="0" disabled>
-                        Carregando Lista....
-                      </SelectItem>
-                    ) : (
-                      <SelectItem value="0" disabled>
-                        Categoria
-                      </SelectItem>
-                    )}
-                    {categoryList.length > 0 &&
-                      categoryList.map((list) => (
-                        <SelectItem
-                          key={list.categoryId}
-                          value={list.categoryId.toString()}
-                        >
-                          {list.name}
-                        </SelectItem>
-                      ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              <Select
-                value={formData.unitId.toString()}
-                onValueChange={(prev) =>
-                  setFormData({ ...formData, unitId: parseInt(prev) })
-                }
-              >
-                <SelectTrigger className="">
-                  <SelectValue placeholder="Unidade" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {unitList.length === 0 ? (
-                      <SelectItem value="0" disabled>
-                        Carregando Lista....
-                      </SelectItem>
-                    ) : (
-                      <SelectItem value="0" disabled>
-                        Unidade
-                      </SelectItem>
-                    )}
-                    {unitList.length > 0 &&
-                      unitList.map((list) => (
-                        <SelectItem
-                          key={list.unitId}
-                          value={list.unitId.toString()}
-                        >
-                          {list.name}
-                        </SelectItem>
-                      ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+              <ComboSelect
+                type="category"
+                selected={selectedCategory}
+                setSelected={setSelectedCategory}
+                data={categoryList.map((cat) => {
+                  return { id: cat.categoryId.toString(), name: cat.name };
+                })}
+              />
+              <ComboSelect
+                type="unit"
+                selected={selectedUnit}
+                setSelected={setSelectedUnit}
+                data={unitList.map((unit) => {
+                  return { id: unit.unitId.toString(), name: unit.name };
+                })}
+              />
             </div>
-            <div className="flex h-full items-end justify-between gap-2">
-              <div className="grid flex-1 gap-2">
-                <Label htmlFor="minStock">Quantidade Mínima em estoque</Label>
-                <Input
-                  id="minStock"
-                  placeholder="exemplo: 10"
-                  value={formData.minStock}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      minStock: parseInt(e.target.value),
-                    })
-                  }
-                />
-              </div>
-            </div>
-
             <Button type="submit">Salvar</Button>
           </form>
         </DialogContent>
@@ -315,7 +255,10 @@ export default function ProductModal({ edit = false, data, apiFn }: Props) {
           </Button>
         )}
       </DrawerTrigger>
-      <DrawerContent className="p-2">
+      <DrawerContent
+        onInteractOutside={(e) => e.preventDefault()}
+        className="p-2"
+      >
         <DrawerHeader className="text-left">
           <DrawerTitle>{dialogTitle}</DrawerTitle>
           <DrawerDescription>
@@ -331,96 +274,31 @@ export default function ProductModal({ edit = false, data, apiFn }: Props) {
               <Label htmlFor="productName">Nome Produto</Label>
               <Input
                 id="productName"
+                autoComplete="off"
+                className="focus-visible:ring-transparent"
                 placeholder="Nome do produto"
-                value={formData.name}
-                onChange={(e) =>
-                  setFormData({ ...formData, name: e.target.value })
-                }
+                value={productName}
+                onChange={(e) => setProductName(e.target.value)}
               />
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <Select
-                value={formData.categoryId.toString()}
-                onValueChange={(prev) =>
-                  setFormData({ ...formData, categoryId: parseInt(prev) })
-                }
-              >
-                <SelectTrigger className="">
-                  <SelectValue placeholder="Categoria" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {categoryList.length === 0 ? (
-                      <SelectItem value="0" disabled>
-                        Carregando Lista....
-                      </SelectItem>
-                    ) : (
-                      <SelectItem value="0" disabled>
-                        Categoria
-                      </SelectItem>
-                    )}
-                    {categoryList.length > 0 &&
-                      categoryList.map((list) => (
-                        <SelectItem
-                          key={list.categoryId}
-                          value={list.categoryId.toString()}
-                        >
-                          {list.name}
-                        </SelectItem>
-                      ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-              <Select
-                value={formData.unitId.toString()}
-                onValueChange={(prev) =>
-                  setFormData({ ...formData, unitId: parseInt(prev) })
-                }
-              >
-                <SelectTrigger className="">
-                  <SelectValue placeholder="Unidade" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    {unitList.length === 0 ? (
-                      <SelectItem value="0" disabled>
-                        Carregando Lista....
-                      </SelectItem>
-                    ) : (
-                      <SelectItem value="0" disabled>
-                        Unidade
-                      </SelectItem>
-                    )}
-                    {unitList.length > 0 &&
-                      unitList.map((list) => (
-                        <SelectItem
-                          key={list.unitId}
-                          value={list.unitId.toString()}
-                        >
-                          {list.name}
-                        </SelectItem>
-                      ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+              <ComboSelect
+                type="category"
+                selected={selectedCategory}
+                setSelected={setSelectedCategory}
+                data={categoryList.map((cat) => {
+                  return { id: cat.categoryId.toString(), name: cat.name };
+                })}
+              />
+              <ComboSelect
+                type="unit"
+                selected={selectedUnit}
+                setSelected={setSelectedUnit}
+                data={unitList.map((unit) => {
+                  return { id: unit.unitId.toString(), name: unit.name };
+                })}
+              />
             </div>
-            <div className="flex h-full items-end justify-between gap-2">
-              <div className="grid flex-1 gap-2">
-                <Label htmlFor="minStock">Quantidade Mínima em estoque</Label>
-                <Input
-                  id="minStock"
-                  placeholder="exemplo: 10"
-                  value={formData.minStock}
-                  onChange={(e) =>
-                    setFormData({
-                      ...formData,
-                      minStock: parseInt(e.target.value),
-                    })
-                  }
-                />
-              </div>
-            </div>
-
             <Button type="submit">Salvar</Button>
           </form>
         </div>

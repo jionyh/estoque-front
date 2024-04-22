@@ -40,9 +40,6 @@ export default async function ProductTable() {
               <TableHead>Produto</TableHead>
               <TableHead>Categoria</TableHead>
               <TableHead className="hidden md:table-cell">Unidade</TableHead>
-              <TableHead className="hidden md:table-cell">
-                Minimo em Estoque
-              </TableHead>
               <TableHead>
                 <span className="sr-only">Ações</span>
               </TableHead>
@@ -57,9 +54,6 @@ export default async function ProductTable() {
                 </TableCell>
                 <TableCell className="hidden md:table-cell">
                   <Badge variant="outline">{product.unit.name}</Badge>
-                </TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {product.minStock}
                 </TableCell>
                 <TableCell>
                   <div className="flex justify-center gap-1 md:gap-4">

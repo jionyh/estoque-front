@@ -243,8 +243,12 @@ function Form({
             </>
           ) : (
             <div className="flex h-full items-end">
-              <div className="flex items-center justify-around gap-2">
-                <Button variant="outline" onClick={() => setHaveValidity(true)}>
+              <div className="flex flex-1 items-center justify-around gap-2">
+                <Button
+                  className="w-full"
+                  variant="outline"
+                  onClick={() => setHaveValidity(true)}
+                >
                   Adicionar Validade
                 </Button>
               </div>

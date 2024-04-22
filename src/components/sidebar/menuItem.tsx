@@ -17,7 +17,8 @@ type Props = {
 
 export default function SidebarMenuItem({ link, name, icon }: Props) {
   const pathname = usePathname();
-  const activePath = pathname === link;
+  const activePath = pathname === link || pathname.startsWith(`${link}/`);
+
   return (
     <TooltipProvider>
       <Tooltip>

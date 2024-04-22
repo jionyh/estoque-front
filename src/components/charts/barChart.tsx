@@ -27,8 +27,8 @@ const data = [
 
 export function Overview() {
   return (
-    <ResponsiveContainer width="100%" height="100%">
-      <BarChart width={280} height={200} data={data} barSize={20}>
+    <ResponsiveContainer width="100%" height="280">
+      <BarChart data={data} barSize={20}>
         <XAxis
           padding={{ left: 0 }}
           dataKey="name"

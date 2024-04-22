@@ -4,7 +4,6 @@ import { Unit } from "./unit";
 export interface Product {
   productId: number;
   name: string;
-  minStock: number;
   unit: Unit;
   category: Category;
 }
@@ -24,5 +23,4 @@ export interface ProductCreate {
   name: string;
   unitId: number;
   categoryId: number;
-  minStock: number;
 }

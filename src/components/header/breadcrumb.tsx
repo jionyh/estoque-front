@@ -16,7 +16,6 @@ export default function BreadcrumbComponent() {
   const paths = ["/", ...pathname.split("/").map((item) => item.trim())].filter(
     Boolean,
   );
-  console.log(paths);
   return (
     <Breadcrumb className="hidden md:flex">
       <BreadcrumbList>
@@ -27,7 +26,7 @@ export default function BreadcrumbComponent() {
                 // Se não for o último item, exibe como link
                 <BreadcrumbItem>
                   <BreadcrumbLink asChild>
-                    <Link href={i === 0 ? "/" : `${paths[i - 1]}/${path}`}>
+                    <Link href={i === 0 ? "/" : `${paths[i - 1]}${path}`}>
                       {path === "/" ? "Painel" : capitalize(path)}
                     </Link>
                   </BreadcrumbLink>
@@ -35,7 +34,7 @@ export default function BreadcrumbComponent() {
               ) : (
                 // Se for o último item, exibe apenas o texto
                 <BreadcrumbItem className="cursor-pointer">
-                  {capitalize(path)}
+                  {path === "/" ? "Painel" : capitalize(path)}
                 </BreadcrumbItem>
               )}
               {i + 1 < paths.length && <BreadcrumbSeparator />}

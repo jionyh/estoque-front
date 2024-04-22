@@ -1,3 +1,3 @@
 export const fetchConfig = {};
 
-export const baseURL = "http://localhost:3031";
+export const baseURL = "http://localhost:3001";

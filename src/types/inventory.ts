@@ -27,3 +27,16 @@ export interface InventoryCreate {
   expiryDate: string | null;
   supplierId: number
 }
+
+export interface InventoryItem{
+  productId: number;
+  name: string;
+  quantity: number;
+  expiryDate: Date | null;
+  inventoryEntry: Inventory[]
+}
+
+export interface InventoryAllList{
+  success: boolean;
+  data:InventoryItem[]
+}

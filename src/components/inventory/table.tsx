@@ -23,6 +23,7 @@ import {
 import api from "@/api";
 import { formatDate } from "@/utils/formatDate";
 import DetailsButton from "./detailsButton";
+import RemoveInventoryButton from "./removeButton";
 
 export default async function InventoryTable() {
   const inventoryList = await api.inventoryEntry.getAll();
@@ -36,65 +37,51 @@ export default async function InventoryTable() {
           <TableHeader>
             <TableRow>
               <TableHead>Produto</TableHead>
-              <TableHead>Quantidade</TableHead>
+              <TableHead>Estoque</TableHead>
               <TableHead className="hidden md:table-cell">Validade</TableHead>
-              <TableHead className="hidden md:table-cell">
-                Adicionado em
-              </TableHead>
               <TableHead>
                 <span className="sr-only">Ações</span>
               </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {inventoryList.data.map((item) => (
-              <TableRow key={item.entryId}>
-                <TableCell className="font-medium">
-                  {item.product.name}
-                </TableCell>
-                <TableCell className="md:table-cell">{item.quantity}</TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {item.expiryDate === null
-                    ? "Indeterminada"
-                    : formatDate(item.date)}
-                </TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {formatDate(item.date)}
-                </TableCell>
-                <TableCell align="right">
-                  <div className="flex justify-center gap-1 md:gap-4">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger className="hover:scale-95">
-                          <DetailsButton entryId={item.entryId} />
-                        </TooltipTrigger>
-                        <TooltipContent>Visualizar</TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger className=" hover:scale-95">
-                          <div className="cursor-pointer rounded border p-1 text-blue-600">
-                            <Plus size={20} />
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent>Adicionar Estoque</TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger className=" hover:scale-95">
-                          <div className="cursor-pointer rounded border p-1 text-red-600">
-                            <Minus size={20} />
-                          </div>
-                        </TooltipTrigger>
-                        <TooltipContent>Remover Estoque</TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
+            {inventoryList.data.length > 0 ? (
+              inventoryList.data.map((item) => (
+                <TableRow key={item.productId}>
+                  <TableCell className="font-medium">{item.name}</TableCell>
+                  <TableCell className="md:table-cell">
+                    {item.quantity}
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {item.expiryDate
+                      ? formatDate(item.expiryDate)
+                      : "Indeterminada"}
+                  </TableCell>
+                  <TableCell align="right">
+                    <div className="flex justify-center gap-1 md:gap-4">
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger className="hover:scale-95 ">
+                            <DetailsButton entryId={item.productId} />
+                          </TooltipTrigger>
+                          <TooltipContent>Visualizar</TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger className=" hover:scale-95">
+                            <RemoveInventoryButton data={item} apiFn={api} />
+                          </TooltipTrigger>
+                          <TooltipContent>Remover Estoque</TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <p>Não há registros para exibir</p>
+            )}
           </TableBody>
         </Table>
       </CardContent>

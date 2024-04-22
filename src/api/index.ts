@@ -13,6 +13,7 @@ import {
 import {
   create as createInventoryEntry,
   getAll as getAllInventoryEntries,
+  remove as removeInventoryEntry,
 } from "./inventoryEntry";
 import {
   create as createCategory,
@@ -41,7 +42,7 @@ const api: ApiFunctions = {
     delete: deleteSupplier,
     edit: editSupplier,
   },
-  inventoryEntry: { getAll: getAllInventoryEntries, create: createInventoryEntry },
+  inventoryEntry: { getAll: getAllInventoryEntries, create: createInventoryEntry, remove:removeInventoryEntry },
   category: {
     create: createCategory,
     getAll: getAllCategories,
