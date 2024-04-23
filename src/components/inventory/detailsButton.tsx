@@ -17,10 +17,8 @@ export default function DetailsButton({ entryId }: Props) {
   }
 
   return (
-    <div onClick={handleDetails}>
-      <Button variant="outline" size="icon">
-        <Search size={20} className="text-primary" />
-      </Button>
-    </div>
+    <Button onClick={handleDetails} variant="outline" size="icon">
+      <Search size={20} className="text-primary" />
+    </Button>
   );
 }

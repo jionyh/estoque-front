@@ -36,6 +36,13 @@ export default function RemoveInventoryButton({ data, apiFn }: Props) {
   const [open, setOpen] = useState(false);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
+  function handleOpenChange(open: boolean) {
+    setOpen(open);
+    if (!open) {
+      setValue(0);
+    }
+  }
+
   function handleValueChange(type: "add" | "sub") {
     const max = data.quantity;
     switch (type) {
@@ -94,7 +101,7 @@ export default function RemoveInventoryButton({ data, apiFn }: Props) {
 
   if (isDesktop) {
     return (
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={handleOpenChange} modal>
         <DialogTrigger className="flex items-center">
           <Button variant="outline" size="icon">
             <Minus size={20} className="text-destructive" />
@@ -111,25 +118,28 @@ export default function RemoveInventoryButton({ data, apiFn }: Props) {
           </DialogHeader>
           <div className="flex h-24  items-center justify-center gap-4">
             <Button
-              onClick={() => handleValueChange("add")}
+              onClick={() => handleValueChange("sub")}
+              disabled={value === 0}
               variant={"outline"}
               size={"icon"}
-              className="h-16 w-16 bg-primary hover:bg-primary/80"
+              className="h-16 w-16 bg-destructive hover:bg-destructive/80"
             >
-              <Plus className="text-primary-foreground" />
+              <Minus className="text-destructive-foreground" />
             </Button>
             <Input
               value={value}
               disabled
               className="h-16 w-28 text-center text-4xl"
             />
+
             <Button
-              onClick={() => handleValueChange("sub")}
+              onClick={() => handleValueChange("add")}
+              disabled={value === data.quantity}
               variant={"outline"}
               size={"icon"}
-              className="h-16 w-16 bg-destructive hover:bg-destructive/80"
+              className="h-16 w-16 bg-primary hover:bg-primary/80"
             >
-              <Minus className="text-destructive-foreground" />
+              <Plus className="text-primary-foreground" />
             </Button>
           </div>
           <DialogFooter className="px-0 pt-2">
@@ -145,7 +155,7 @@ export default function RemoveInventoryButton({ data, apiFn }: Props) {
   }
 
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
+    <Drawer open={open} onOpenChange={setOpen} onClose={() => setValue(0)}>
       <DrawerTrigger asChild>
         <Button variant="outline" size="icon">
           <Minus size={20} className="text-destructive" />

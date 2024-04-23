@@ -1,8 +1,10 @@
-"use client";
-
-import { useEntryContext } from "@/components/context";
+import api from "@/api";
+import TabelaDetalhes from "./table";
 
 export default function Detalhes() {
-  const { entryId } = useEntryContext();
-  return <h1>Detalhes {entryId}</h1>;
+  return (
+    <div>
+      <TabelaDetalhes apiFn={api} />
+    </div>
+  );
 }

@@ -20,11 +20,18 @@ data:Omit<InventoryCreate,'entryId'>
 export const getAll = async (): Promise<InventoryAllList> => {
   "use server";
   const res = await fetch(`${baseURL}/inventory`, {
-    cache: "no-cache",
     next: { tags: ["allInventory"] },
   });
   return await res.json();
 };
+export const getInventoryEntries = async(productId: string)=>{
+  "use server";
+  const res = await fetch(`${baseURL}/inventory/${productId}`, {
+    next: { tags: [`inventory/${productId}`] },
+  });
+  return await res.json();
+}
+
 export const remove = async ({productId, quantity}:{productId:number, quantity:number}):Promise<InventoryCreateResponse | ErrorResponse>  => {
   "use server";
   const res = await fetch(`${baseURL}/inventory/remove`, {

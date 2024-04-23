@@ -1,13 +1,16 @@
+import { Category } from "./category";
 import { Product } from "./product";
 import { Supplier } from "./supplier";
+import { Unit } from "./unit";
 
 export interface Inventory {
   entryId: number;
   date: Date;
   quantity: number;
   expiryDate: Date | null;
-  product: Omit<Product, 'unit' | 'category'>
-  supplier: Omit<Supplier, 'phone' | 'email'>
+  addedBy: string
+  type: 'IN' | 'OUT'
+  supplier: string
 }
 
 export interface InventoryResponse {
@@ -33,7 +36,9 @@ export interface InventoryItem{
   name: string;
   quantity: number;
   expiryDate: Date | null;
-  inventoryEntry: Inventory[]
+  category: Category
+  unit: Unit
+  inventoryEntries: Inventory[]
 }
 
 export interface InventoryAllList{

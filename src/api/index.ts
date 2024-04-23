@@ -14,6 +14,7 @@ import {
   create as createInventoryEntry,
   getAll as getAllInventoryEntries,
   remove as removeInventoryEntry,
+  getInventoryEntries
 } from "./inventoryEntry";
 import {
   create as createCategory,
@@ -42,7 +43,7 @@ const api: ApiFunctions = {
     delete: deleteSupplier,
     edit: editSupplier,
   },
-  inventoryEntry: { getAll: getAllInventoryEntries, create: createInventoryEntry, remove:removeInventoryEntry },
+  inventoryEntry: { getAll: getAllInventoryEntries, create: createInventoryEntry, remove:removeInventoryEntry, get: getInventoryEntries },
   category: {
     create: createCategory,
     getAll: getAllCategories,

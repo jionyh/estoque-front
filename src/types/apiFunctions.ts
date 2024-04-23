@@ -31,6 +31,7 @@ export interface ApiFunctions {
     edit: (data: Supplier) => Promise<SupplierCreateResponse | ErrorResponse>;
   };
   inventoryEntry: {
+    get: (productId:string)=>Promise<any>
     getAll: () => Promise<InventoryAllList>;
     create: (data:Omit<InventoryCreate,'entryId'>)=>Promise<InventoryCreateResponse | ErrorResponse>;
     remove: ({productId, quantity}:{productId:number, quantity:number})=>Promise<InventoryCreateResponse | ErrorResponse>;

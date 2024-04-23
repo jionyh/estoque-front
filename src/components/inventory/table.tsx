@@ -52,10 +52,8 @@ export default async function InventoryTable() {
                   <TableCell className="md:table-cell">
                     {item.quantity}
                   </TableCell>
-                  <TableCell className="hidden md:table-cell">
-                    {item.expiryDate
-                      ? formatDate(item.expiryDate)
-                      : "Indeterminada"}
+                  <TableCell className="hidden text-center md:table-cell">
+                    {item.expiryDate ? formatDate(item.expiryDate) : "-"}
                   </TableCell>
                   <TableCell align="right">
                     <div className="flex justify-center gap-1 md:gap-4">
@@ -85,11 +83,7 @@ export default async function InventoryTable() {
           </TableBody>
         </Table>
       </CardContent>
-      <CardFooter>
-        <div className="text-xs text-muted-foreground">
-          Showing <strong>1-10</strong> of <strong>32</strong> products
-        </div>
-      </CardFooter>
+      <CardFooter></CardFooter>
     </Card>
   );
 }
