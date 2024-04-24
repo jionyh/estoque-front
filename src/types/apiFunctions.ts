@@ -60,4 +60,7 @@ export interface ApiFunctions {
       name: string,
     ) => Promise<UnitCreateResponse | ErrorResponse>;
   };
+  user:{
+    login:({email,password}:{email:any, password:any})=>Promise<any>
+  }
 }

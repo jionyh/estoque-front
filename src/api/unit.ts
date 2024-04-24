@@ -1,5 +1,5 @@
 "use server";
-import { baseURL } from "@/config/api";
+import { baseURL, fetchOptions } from "@/config/api";
 import { ErrorResponse } from "@/types/error";
 import { UnitCreateResponse, UnitResponse } from "@/types/unit";
 import { revalidateTag } from "next/cache";
@@ -8,18 +8,21 @@ export const create = async (
   name: string,
 ): Promise<UnitCreateResponse | ErrorResponse> => {
   "use server";
+  
+  const options = await fetchOptions()
   const res = await fetch(`${baseURL}/unit/create`, {
+    ...options,
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify({ name }),
   });
   revalidateTag("allUnit");
   return await res.json();
 };
 export const getAll = async (): Promise<UnitResponse> => {
+  "user server"
+  const options = await fetchOptions()
   const res = await fetch(`${baseURL}/unit`, {
+    ...options,
     cache: "no-cache",
     next: { tags: ["allUnit"] },
   });
@@ -31,11 +34,11 @@ export const deleteUnit = async (
   name: string,
 ): Promise<UnitCreateResponse | ErrorResponse> => {
   "use server";
+  
+  const options = await fetchOptions()
   const res = await fetch(`${baseURL}/unit/delete`, {
+    ...options,
     method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify({ unitId, name }),
   });
   revalidateTag("allUnit");
@@ -47,11 +50,11 @@ export const edit = async (
   name: string,
 ): Promise<UnitCreateResponse | ErrorResponse> => {
   "use server";
+  
+  const options = await fetchOptions()
   const res = await fetch(`${baseURL}/unit/edit`, {
+    ...options,
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify({ unitId, name }),
   });
   revalidateTag("allUnit");

@@ -172,19 +172,6 @@ export default function RemoveInventoryButton({ data, apiFn }: Props) {
         </DrawerHeader>
         <div className="flex h-24  items-center justify-center gap-4">
           <Button
-            onClick={() => handleValueChange("add")}
-            variant={"outline"}
-            size={"icon"}
-            className="h-16 w-16 bg-primary hover:bg-primary/80"
-          >
-            <Plus className="text-primary-foreground" />
-          </Button>
-          <Input
-            value={value}
-            disabled
-            className="h-16 w-28 text-center text-4xl"
-          />
-          <Button
             onClick={() => handleValueChange("sub")}
             variant={"outline"}
             size={"icon"}
@@ -192,9 +179,26 @@ export default function RemoveInventoryButton({ data, apiFn }: Props) {
           >
             <Minus className="text-destructive-foreground" />
           </Button>
+          <Input
+            value={value}
+            disabled
+            className="h-16 w-28 text-center text-4xl"
+          />
+          <Button
+            onClick={() => handleValueChange("add")}
+            variant={"outline"}
+            size={"icon"}
+            className="h-16 w-16 bg-primary hover:bg-primary/80"
+          >
+            <Plus className="text-primary-foreground" />
+          </Button>
         </div>
         <DrawerFooter className="px-0 pt-2">
-          <Button variant="default">{`Remover ${value} ${data.name}`}</Button>
+          <Button
+            onClick={handleInventoryRemove}
+            className="w-full"
+            variant="default"
+          >{`Remover ${value} ${data.name}`}</Button>
           <DrawerClose asChild>
             <Button variant="outline">Cancelar</Button>
           </DrawerClose>

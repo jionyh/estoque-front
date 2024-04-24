@@ -1,4 +1,4 @@
-import { baseURL } from "@/config/api";
+import { baseURL, fetchOptions } from "@/config/api";
 import { ErrorResponse } from "@/types/error";
 import {
   ProductCreate,
@@ -11,11 +11,11 @@ export const create = async (
   data: Omit<ProductCreate, "productId">,
 ): Promise<ProductCreateResponse | ErrorResponse> => {
   "use server";
+
+  const options = await fetchOptions()
   const res = await fetch(`${baseURL}/product/create`, {
+    ...options,
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   });
   revalidateTag("allProducts");
@@ -23,7 +23,10 @@ export const create = async (
 };
 export const getAll = async (): Promise<ProductResponse> => {
   "use server";
+  
+  const options = await fetchOptions()
   const res = await fetch(`${baseURL}/product`, {
+    ...options,
     cache: "no-cache",
     next: { tags: ["allProducts"] },
   });
@@ -34,11 +37,11 @@ export const edit = async (
   data: ProductCreate,
 ): Promise<ProductCreateResponse | ErrorResponse> => {
   "use server";
+  
+  const options = await fetchOptions()
   const res = await fetch(`${baseURL}/product/edit`, {
+    ...options,
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   });
   revalidateTag("allProducts");
@@ -49,11 +52,11 @@ export const deleteProduct = async (
   data: ProductCreate,
 ): Promise<ProductCreateResponse | ErrorResponse> => {
   "use server";
+  
+  const options = await fetchOptions()
   const res = await fetch(`${baseURL}/product/delete`, {
+    ...options,
     method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   });
   revalidateTag("allProducts");

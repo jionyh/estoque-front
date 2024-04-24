@@ -1,4 +1,4 @@
-import { baseURL } from "@/config/api";
+import { baseURL, fetchOptions } from "@/config/api";
 import { ErrorResponse } from "@/types/error";
 import {
   Supplier,
@@ -11,11 +11,11 @@ export const create = async (
   data: Omit<Supplier, "supplierId">,
 ): Promise<SupplierCreateResponse | ErrorResponse> => {
   "use server";
+  
+  const options = await fetchOptions()
   const res = await fetch(`${baseURL}/supplier/create`, {
+    ...options,
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   });
   revalidateTag("allSupplier");
@@ -23,7 +23,10 @@ export const create = async (
 };
 export const getAll = async (): Promise<SupplierResponse> => {
   "use server";
+  
+  const options = await fetchOptions()
   const res = await fetch(`${baseURL}/supplier`, {
+    ...options,
     cache: "no-cache",
     next: { tags: ["allSupplier"] },
   });
@@ -33,11 +36,11 @@ export const deleteSupplier = async (
   data: Supplier,
 ): Promise<SupplierCreateResponse | ErrorResponse> => {
   "use server";
+  
+  const options = await fetchOptions()
   const res = await fetch(`${baseURL}/supplier/delete`, {
+    ...options,
     method: "DELETE",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   });
   revalidateTag("allSupplier");
@@ -48,11 +51,11 @@ export const edit = async (
   data: Supplier,
 ): Promise<SupplierCreateResponse | ErrorResponse> => {
   "use server";
+  
+  const options = await fetchOptions()
   const res = await fetch(`${baseURL}/supplier/edit`, {
+    ...options,
     method: "PATCH",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(data),
   });
   revalidateTag("allSupplier");
