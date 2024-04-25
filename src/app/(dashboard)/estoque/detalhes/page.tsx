@@ -1,5 +1,5 @@
 import api from "@/api";
-import TabelaDetalhes from "./table";
+import TabelaDetalhes from "@/components/inventoryDetails/table";
 
 export default function Detalhes() {
   return (

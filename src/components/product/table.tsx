@@ -46,37 +46,41 @@ export default async function ProductTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {productsList.data.map((product) => (
-              <TableRow key={product.productId}>
-                <TableCell className="font-medium">{product.name}</TableCell>
-                <TableCell>
-                  <Badge variant="outline">{product.category.name}</Badge>
-                </TableCell>
-                <TableCell className="hidden md:table-cell">
-                  <Badge variant="outline">{product.unit.name}</Badge>
-                </TableCell>
-                <TableCell>
-                  <div className="flex justify-center gap-1 md:gap-4">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger className=" hover:scale-95">
-                          <ProductModal edit apiFn={api} data={product} />
-                        </TooltipTrigger>
-                        <TooltipContent>Editar Produto</TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger className=" hover:scale-95">
-                          <DeleteProductButton data={product} apiFn={api} />
-                        </TooltipTrigger>
-                        <TooltipContent>Deletar Produto</TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
+            {productsList ? (
+              productsList.data.map((product) => (
+                <TableRow key={product.productId}>
+                  <TableCell className="font-medium">{product.name}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline">{product.category.name}</Badge>
+                  </TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    <Badge variant="outline">{product.unit.name}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex justify-center gap-1 md:gap-4">
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger className=" hover:scale-95">
+                            <ProductModal edit apiFn={api} data={product} />
+                          </TooltipTrigger>
+                          <TooltipContent>Editar Produto</TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger className=" hover:scale-95">
+                            <DeleteProductButton data={product} apiFn={api} />
+                          </TooltipTrigger>
+                          <TooltipContent>Deletar Produto</TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <h1>Carregando...</h1>
+            )}
           </TableBody>
         </Table>
       </CardContent>

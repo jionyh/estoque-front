@@ -44,41 +44,45 @@ export default async function CatAndUnitTable() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {categoryList.data.map((cat) => (
-                <TableRow
-                  key={cat.categoryId}
-                  className="odd:bg-muted/50 even:bg-muted"
-                >
-                  <TableCell className="font-medium">{cat.name}</TableCell>
-                  <TableCell align="right">
-                    <div className="flex justify-center gap-1 md:gap-4">
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <CatAndUnitModal
-                              edit
-                              data={{ id: cat.categoryId, name: cat.name }}
-                              apiFn={api}
-                            />
-                          </TooltipTrigger>
-                          <TooltipContent>Editar</TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger>
-                            <DeleteButton
-                              data={{ id: cat.categoryId, name: cat.name }}
-                              apiFn={api}
-                            />
-                          </TooltipTrigger>
-                          <TooltipContent>Deletar</TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </div>
-                  </TableCell>
-                </TableRow>
-              ))}
+              {categoryList.data ? (
+                categoryList.data.map((cat) => (
+                  <TableRow
+                    key={cat.categoryId}
+                    className="odd:bg-muted/50 even:bg-muted"
+                  >
+                    <TableCell className="font-medium">{cat.name}</TableCell>
+                    <TableCell align="right">
+                      <div className="flex justify-center gap-1 md:gap-4">
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              <CatAndUnitModal
+                                edit
+                                data={{ id: cat.categoryId, name: cat.name }}
+                                apiFn={api}
+                              />
+                            </TooltipTrigger>
+                            <TooltipContent>Editar</TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger>
+                              <DeleteButton
+                                data={{ id: cat.categoryId, name: cat.name }}
+                                apiFn={api}
+                              />
+                            </TooltipTrigger>
+                            <TooltipContent>Deletar</TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <div>carregando...</div>
+              )}
             </TableBody>
           </Table>
         </CardContent>

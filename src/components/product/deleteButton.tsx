@@ -29,7 +29,6 @@ export default function DeleteProductButton({ data, apiFn }: Props) {
       name: data.name,
       categoryId: data.category.categoryId,
       unitId: data.unit.unitId,
-      minStock: data.minStock,
     });
 
     if (res.success) {

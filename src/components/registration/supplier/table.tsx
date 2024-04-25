@@ -47,35 +47,39 @@ export default async function SupplierTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {supplierList.data.map((supplier) => (
-              <TableRow key={supplier.supplierId}>
-                <TableCell className="font-medium">{supplier.name}</TableCell>
-                <TableCell>{supplier.phone}</TableCell>
-                <TableCell className="hidden md:table-cell">
-                  {supplier.email}
-                </TableCell>
-                <TableCell align="right">
-                  <div className="flex justify-center gap-1 md:gap-4">
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <SupplierModal edit apiFn={api} data={supplier} />
-                        </TooltipTrigger>
-                        <TooltipContent>Editar</TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                    <TooltipProvider>
-                      <Tooltip>
-                        <TooltipTrigger>
-                          <DeleteSupplierButton data={supplier} apiFn={api} />
-                        </TooltipTrigger>
-                        <TooltipContent>Deletar</TooltipContent>
-                      </Tooltip>
-                    </TooltipProvider>
-                  </div>
-                </TableCell>
-              </TableRow>
-            ))}
+            {supplierList.data ? (
+              supplierList.data.map((supplier) => (
+                <TableRow key={supplier.supplierId}>
+                  <TableCell className="font-medium">{supplier.name}</TableCell>
+                  <TableCell>{supplier.phone}</TableCell>
+                  <TableCell className="hidden md:table-cell">
+                    {supplier.email}
+                  </TableCell>
+                  <TableCell align="right">
+                    <div className="flex justify-center gap-1 md:gap-4">
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <SupplierModal edit apiFn={api} data={supplier} />
+                          </TooltipTrigger>
+                          <TooltipContent>Editar</TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <DeleteSupplierButton data={supplier} apiFn={api} />
+                          </TooltipTrigger>
+                          <TooltipContent>Deletar</TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <div>carregando...</div>
+            )}
           </TableBody>
         </Table>
       </CardContent>

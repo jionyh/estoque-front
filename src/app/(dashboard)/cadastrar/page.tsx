@@ -1,6 +1,9 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SupplierTable from "@/components/registration/supplier/table";
 import CatAndUnitTable from "@/components/registration/catAndUnit/table";
+/* Corrige o erro de prerender-error */
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
 
 export default function Cadastros() {
   return (
