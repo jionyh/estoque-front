@@ -44,7 +44,7 @@ export default async function CatAndUnitTable() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {categoryList.data ? (
+              {categoryList.data.length > 0 ? (
                 categoryList.data.map((cat) => (
                   <TableRow
                     key={cat.categoryId}

@@ -1,11 +1,18 @@
 import Header from "@/components/header/header";
 import Sidebar from "@/components/sidebar/sidebar";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../api/auth/[...nextauth]/options";
+import { redirect } from "next/navigation";
 
-export default function HomeLayout({
+export default async function HomeLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const session = await getServerSession(authOptions);
+  if (session && session.redirect) {
+    redirect("/login");
+  }
   return (
     <>
       <Sidebar />

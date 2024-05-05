@@ -2,6 +2,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import ProductModal from "@/components/product/modal";
 import api from "@/api";
 import ProductTable from "@/components/product/table";
+/* Corrige o erro de prerender-error */
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
 
 export default function Products() {
   return (

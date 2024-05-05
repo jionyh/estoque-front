@@ -24,10 +24,11 @@ export const getAll = async (): Promise<CategoryResponse> => {
   const options = await fetchOptions()
   const res = await fetch(`${baseURL}/category`, {
     ...options,
-    cache: "no-cache",
+    cache: "no-store",
     next: { tags: ["allCategories"] },
   });
-  return await res.json();
+  const json =  await res.json();
+  return json
 };
 
 export const deleteCategory = async (

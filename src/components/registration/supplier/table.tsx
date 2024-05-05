@@ -47,7 +47,7 @@ export default async function SupplierTable() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {supplierList.data ? (
+            {supplierList.data.length > 0 ? (
               supplierList.data.map((supplier) => (
                 <TableRow key={supplier.supplierId}>
                   <TableCell className="font-medium">{supplier.name}</TableCell>

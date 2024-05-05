@@ -3,6 +3,10 @@ import InventoryTable from "@/components/inventory/table";
 import InventoryModal from "@/components/inventory/modal";
 import api from "@/api";
 
+/* Corrige o erro de prerender-error */
+export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
+
 export default async function Inventory() {
   const supplierList = await api.supplier.getAll();
   const productList = await api.product.getAll();

@@ -1,11 +1,14 @@
-export interface AuthUser {
-  name: string
+export interface UserType{
   email: string
+  password: string
+}
+export interface AuthUser {
+  user:UserType,
   accessToken: string
   refreshToken: string
 }
 
-export interface AuthLogin {
-  success: boolean
-  user: AuthUser
+export interface AuthResponse {
+  success: true
+  data: AuthUser
 }

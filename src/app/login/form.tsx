@@ -28,6 +28,9 @@ export default function LoginForm({ apiFn }: Props) {
       callbackUrl: `/`,
     });
     if (!loggedUser?.error && loggedUser?.ok) {
+      //const res = await apiFn.user.login({ email, password });
+      //console.log(res);
+      //console.log("logged", loggedUser);
       router.push("/");
     }
   };

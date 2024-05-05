@@ -29,7 +29,7 @@ import {
   edit as editUnit,
 } from "./unit";
 import { ApiFunctions } from "@/types/apiFunctions";
-import { login } from "./user";
+import { login, refreshToken } from "./user";
 
 const api: ApiFunctions = {
   product: {
@@ -59,6 +59,7 @@ const api: ApiFunctions = {
   },
   user:{
     login,
+    refreshToken
   }
 };
 

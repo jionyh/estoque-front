@@ -8,6 +8,7 @@ import { InventoryAllList, InventoryCreate, InventoryCreateResponse, InventoryRe
 import { CategoryCreateResponse, CategoryResponse } from "./category";
 import { ErrorResponse } from "./error";
 import { UnitCreateResponse, UnitResponse } from "./unit";
+import { AuthResponse, UserType } from "./authType";
 
 export interface ApiFunctions {
   product: {
@@ -61,6 +62,7 @@ export interface ApiFunctions {
     ) => Promise<UnitCreateResponse | ErrorResponse>;
   };
   user:{
-    login:({email,password}:{email:any, password:any})=>Promise<any>
+    login:(data:UserType)=>Promise<AuthResponse | ErrorResponse>
+    refreshToken:({refreshToken}:{refreshToken:string})=>Promise<any>
   }
 }

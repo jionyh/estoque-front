@@ -27,7 +27,7 @@ export const getAll = async (): Promise<SupplierResponse> => {
   const options = await fetchOptions()
   const res = await fetch(`${baseURL}/supplier`, {
     ...options,
-    cache: "no-cache",
+    cache: "no-store",
     next: { tags: ["allSupplier"] },
   });
   return await res.json();
