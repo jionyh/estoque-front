@@ -1,14 +1,5 @@
-import {
-  PanelLeft,
-  Package2,
-  Home,
-  ShoppingCart,
-  Package,
-  Users2,
-  LineChart,
-  UserRound,
-} from "lucide-react";
-
+"use client";
+import { PanelLeft, Package2, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetTrigger, SheetContent } from "@/components/ui/sheet";
 import {
@@ -22,6 +13,7 @@ import {
 import Link from "next/link";
 import BreadcrumbComponent from "./breadcrumb";
 import { menuList } from "@/constants/menuItem";
+import { signOut } from "next-auth/react";
 
 export default function Header() {
   return (
@@ -72,7 +64,12 @@ export default function Header() {
           <DropdownMenuItem>Configurações</DropdownMenuItem>
           <DropdownMenuItem>Suporte</DropdownMenuItem>
           <DropdownMenuSeparator />
-          <DropdownMenuItem>Sair</DropdownMenuItem>
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={() => signOut()}
+          >
+            Sair
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
     </header>

@@ -4,6 +4,7 @@ import {
   CardTitle,
   CardContent,
   CardFooter,
+  CardDescription,
 } from "../ui/card";
 import {
   Tooltip,
@@ -11,7 +12,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "../ui/tooltip";
-import { Plus, Minus, Search } from "lucide-react";
+import { Plus, Minus, Search, ArrowUpRight } from "lucide-react";
 import {
   TableHeader,
   TableRow,
@@ -24,24 +25,34 @@ import api from "@/api";
 import { formatDate } from "@/utils/formatDate";
 import DetailsButton from "./detailsButton";
 import RemoveInventoryButton from "./removeButton";
+import { Button } from "../ui/button";
+import Link from "next/link";
 
-export default async function InventoryTable() {
+type Props = {
+  dashboard?: boolean;
+};
+
+export default async function InventoryTable({ dashboard = false }: Props) {
   const inventoryList = await api.inventoryEntry.getAll();
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Estoque</CardTitle>
-      </CardHeader>
+    <Card className={`${dashboard && "xl:col-span-2"}`}>
+      {dashboard ? <DashboardTitle /> : <DefaultTitle />}
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
               <TableHead>Produto</TableHead>
               <TableHead>Estoque</TableHead>
-              <TableHead className="hidden md:table-cell">Validade</TableHead>
-              <TableHead>
-                <span className="sr-only">Ações</span>
-              </TableHead>
+              {!dashboard && (
+                <>
+                  <TableHead className="hidden md:table-cell">
+                    Validade
+                  </TableHead>
+                  <TableHead>
+                    <span className="sr-only">Ações</span>
+                  </TableHead>
+                </>
+              )}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -52,29 +63,36 @@ export default async function InventoryTable() {
                   <TableCell className="md:table-cell">
                     {item.quantity}
                   </TableCell>
-                  <TableCell className="hidden text-center md:table-cell">
-                    {item.expiryDate ? formatDate(item.expiryDate) : "-"}
-                  </TableCell>
-                  <TableCell align="right">
-                    <div className="flex justify-center gap-1 md:gap-4">
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger className="hover:scale-95 ">
-                            <DetailsButton entryId={item.productId} />
-                          </TooltipTrigger>
-                          <TooltipContent>Visualizar</TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                      <TooltipProvider>
-                        <Tooltip>
-                          <TooltipTrigger className=" hover:scale-95">
-                            <RemoveInventoryButton data={item} apiFn={api} />
-                          </TooltipTrigger>
-                          <TooltipContent>Remover Estoque</TooltipContent>
-                        </Tooltip>
-                      </TooltipProvider>
-                    </div>
-                  </TableCell>
+                  {!dashboard && (
+                    <>
+                      <TableCell className="hidden text-center md:table-cell">
+                        {item.expiryDate ? formatDate(item.expiryDate) : "-"}
+                      </TableCell>
+                      <TableCell align="right">
+                        <div className="flex justify-center gap-1 md:gap-4">
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger className="hover:scale-95 ">
+                                <DetailsButton entryId={item.productId} />
+                              </TooltipTrigger>
+                              <TooltipContent>Visualizar</TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger className=" hover:scale-95">
+                                <RemoveInventoryButton
+                                  data={item}
+                                  apiFn={api}
+                                />
+                              </TooltipTrigger>
+                              <TooltipContent>Remover Estoque</TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </div>
+                      </TableCell>
+                    </>
+                  )}
                 </TableRow>
               ))
             ) : (
@@ -87,3 +105,28 @@ export default async function InventoryTable() {
     </Card>
   );
 }
+
+const DashboardTitle = () => {
+  return (
+    <CardHeader className="flex flex-row items-center">
+      <div className="grid gap-2">
+        <CardTitle>Estoque atual</CardTitle>
+        <CardDescription>Resumo estoque</CardDescription>
+      </div>
+      <Button asChild size="sm" className="ml-auto gap-1">
+        <Link href="/estoque">
+          Ver detalhes estoque
+          <ArrowUpRight className="h-4 w-4" />
+        </Link>
+      </Button>
+    </CardHeader>
+  );
+};
+
+const DefaultTitle = () => {
+  return (
+    <CardHeader>
+      <CardTitle>Estoque</CardTitle>
+    </CardHeader>
+  );
+};
